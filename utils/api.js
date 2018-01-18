@@ -7,7 +7,7 @@ const initialData = {
 
     questions: [
       {
-        questions: "Is south afroca  a country?",
+        questions: "Is south africa  a country?",
         answer: "No , It is  a region",
         correctAnswer: "false"
       },
@@ -52,4 +52,14 @@ export function getDecks(deck){
       return JSON.parse(results)
     }
   })
+}
+
+export function saveDeckTitle(title){
+  return AsyncStorage.mergeItem(FLASHCARDS_STORAGE_KEY,JSON.stringify({
+   [title]:{
+     title: title,
+     questions:[]
+   } 
+  }))
+   
 }
