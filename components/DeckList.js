@@ -49,7 +49,7 @@ function mapDispatchToProps(dispatch){
 
 function mapStateToProps(decks){
    return {
-     decks 
+     decks
     }
 }
 
