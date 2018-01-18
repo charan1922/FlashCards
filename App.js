@@ -1,57 +1,79 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import React, { Component } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import DeckList from "./components/DeckList";
 
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { TabNavigator,StackNavigator } from "react-navigation";
+// import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { purple, white } from "./utils/colors";
+import AddDeck from "./components/AddDeck";
+import DeckView from'./components/DeckView';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import { Provider } from "react-redux";
+import reducer from './reducers'
+import {createStore} from 'redux'
 
-export default class App extends Component<{}> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-      </View>
-    );
+const Tabs = TabNavigator(
+  {
+    DeckList: {
+      screen: DeckList,
+      navigationOptions: {
+        tabBarLabel: "DeckList",
+        // tabBarIcon: ({ tintColor }) => 
+        //   <MaterialCommunityIcons name="cards" size={30} color={tintColor} />
+        
+      }
+    },
+    AddDeck: {
+      screen: AddDeck,
+      navigationOptions: {
+        tabBarLabel: "AddDeck",
+        // tabBarIcon: ({ tintColor }) => 
+        //   <FontAwesome name="plus-square" size={30} color={tintColor} />
+        
+      }
+    }
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: purple,
+      style: {
+        height: 56,
+        backgroundColor: white
+      }
+    }
+  }
+);
+
+const MainNavigator = StackNavigator({
+Home:{
+  screen:Tabs,
+  navigationOptions:{
+    header:null
+  }
+},
+DeckView:{
+  screen:DeckView,
+  navigationOptions:{
+    title:'Deck Info',
+    headerTintColor:white,
+    headerStyle:{
+      backgroundColor: purple,
+    }
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+})
+
+const store = createStore(reducer);
+
+export default class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+      <View style={{ flex: 1 }}>
+            <MainNavigator />
+      </View>
+      </Provider>
+    );
+  }
+}
